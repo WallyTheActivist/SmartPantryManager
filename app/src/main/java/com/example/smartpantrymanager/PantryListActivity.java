@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.Intent;
 
 /**
  * Home screen: shows every ingredient currently in the user's pantry.
@@ -46,10 +47,10 @@ public class PantryListActivity extends AppCompatActivity {
         adapter = new PantryAdapter(new ArrayList<>(), new PantryAdapter.OnPantryItemActionListener() {
             @Override
             public void onItemClick(PantryItem item) {
-                // TEMPORARY: Step 5 will open the Edit screen here
-                Toast.makeText(PantryListActivity.this,
-                        "Edit screen coming in Step 5: " + item.getName(),
-                        Toast.LENGTH_SHORT).show();
+                // Open the Add/Edit screen in Edit mode, passing this item's id
+                Intent intent = new Intent(PantryListActivity.this, AddEditIngredientActivity.class);
+                intent.putExtra(AddEditIngredientActivity.EXTRA_ITEM_ID, item.getId());
+                startActivity(intent);
             }
 
             @Override
@@ -62,10 +63,9 @@ public class PantryListActivity extends AppCompatActivity {
         recyclerPantry.setAdapter(adapter);
 
         fabAdd.setOnClickListener(v -> {
-            // TEMPORARY: Step 5 will open the Add screen here.
-            // For now we insert a sample item so we can test the list.
-            dbHelper.addPantryItem(new PantryItem("tomatoes", 3, "pcs", "2026-10-20"));
-            loadPantryItems();
+            // Open the Add/Edit screen in Add mode (no id is sent)
+            Intent intent = new Intent(PantryListActivity.this, AddEditIngredientActivity.class);
+            startActivity(intent);
         });
     }
 
