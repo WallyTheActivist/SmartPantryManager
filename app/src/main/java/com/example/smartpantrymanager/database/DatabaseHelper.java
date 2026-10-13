@@ -4,6 +4,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import com.example.smartpantrymanager.model.PantryItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Creates and manages the SQLite database for the Smart Pantry Manager.
@@ -96,5 +103,113 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PANTRY);
         onCreate(db);
+    }
+    // =====================================================
+    //                  PANTRY CRUD METHODS
+    // =====================================================
+
+    /**
+     * CREATE: inserts a new pantry item.
+     * Returns the new row id, or -1 if the insert failed.
+     */
+    public long addPantryItem(PantryItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_PANTRY_NAME, item.getName());
+        values.put(COL_PANTRY_QUANTITY, item.getQuantity());
+        values.put(COL_PANTRY_UNIT, item.getUnit());
+        values.put(COL_PANTRY_EXPIRY, item.getExpiryDate());
+
+        long newId = db.insert(TABLE_PANTRY, null, values);
+        db.close();
+        return newId;
+    }
+
+    /**
+     * READ: returns every pantry item, sorted alphabetically by name.
+     */
+    public List<PantryItem> getAllPantryItems() {
+        List<PantryItem> items = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_PANTRY, null, null, null,
+                null, null, COL_PANTRY_NAME + " ASC");
+
+        if (cursor.moveToFirst()) {
+            do {
+                items.add(cursorToPantryItem(cursor));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return items;
+    }
+
+    /**
+     * READ: returns one pantry item by its id, or null if it doesn't exist.
+     * Used by the Edit screen to pre-fill the form.
+     */
+    public PantryItem getPantryItem(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        PantryItem item = null;
+
+        Cursor cursor = db.query(TABLE_PANTRY, null,
+                COL_PANTRY_ID + " = ?", new String[]{String.valueOf(id)},
+                null, null, null);
+
+        if (cursor.moveToFirst()) {
+            item = cursorToPantryItem(cursor);
+        }
+
+        cursor.close();
+        db.close();
+        return item;
+    }
+
+    /**
+     * UPDATE: overwrites an existing item, matched by its id.
+     * Returns the number of rows changed (1 = success, 0 = not found).
+     */
+    public int updatePantryItem(PantryItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_PANTRY_NAME, item.getName());
+        values.put(COL_PANTRY_QUANTITY, item.getQuantity());
+        values.put(COL_PANTRY_UNIT, item.getUnit());
+        values.put(COL_PANTRY_EXPIRY, item.getExpiryDate());
+
+        int rows = db.update(TABLE_PANTRY, values,
+                COL_PANTRY_ID + " = ?", new String[]{String.valueOf(item.getId())});
+        db.close();
+        return rows;
+    }
+
+    /**
+     * DELETE: removes the item with the given id.
+     * Returns the number of rows deleted (1 = success, 0 = not found).
+     */
+    public int deletePantryItem(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int rows = db.delete(TABLE_PANTRY,
+                COL_PANTRY_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+        return rows;
+    }
+
+    /**
+     * Helper: converts the row the Cursor is currently pointing at
+     * into a PantryItem object. Avoids repeating this code.
+     */
+    private PantryItem cursorToPantryItem(Cursor cursor) {
+        int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_PANTRY_ID));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_PANTRY_NAME));
+        double quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_PANTRY_QUANTITY));
+        String unit = cursor.getString(cursor.getColumnIndexOrThrow(COL_PANTRY_UNIT));
+        String expiry = cursor.getString(cursor.getColumnIndexOrThrow(COL_PANTRY_EXPIRY));
+        return new PantryItem(id, name, quantity, unit, expiry);
     }
 }
