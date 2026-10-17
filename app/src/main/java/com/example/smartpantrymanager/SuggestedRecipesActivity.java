@@ -3,7 +3,6 @@ package com.example.smartpantrymanager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +16,7 @@ import com.example.smartpantrymanager.model.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.Intent;
 
 /**
  * Shows ONLY the recipes the user can cook right now, using the
@@ -44,10 +44,10 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
 
         adapter = new RecipeAdapter(new ArrayList<>(), recipe -> {
-            // TEMPORARY: Step 9 will open the Recipe Detail screen here
-            Toast.makeText(SuggestedRecipesActivity.this,
-                    "Detail screen coming in Step 9: " + recipe.getName(),
-                    Toast.LENGTH_SHORT).show();
+            // Open the Recipe Detail screen, passing the tapped recipe's id
+            Intent intent = new Intent(SuggestedRecipesActivity.this, RecipeDetailActivity.class);
+            intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, recipe.getId());
+            startActivity(intent);
         });
 
         recyclerRecipes.setLayoutManager(new LinearLayoutManager(this));
