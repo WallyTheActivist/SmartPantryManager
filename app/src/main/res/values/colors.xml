@@ -3,4 +3,6 @@
     <color name="primary_green">#2E7D32</color>
     <color name="background_grey">#F5F5F5</color>
     <color name="text_secondary">#757575</color>
+    <color name="expiry_soon">#EF6C00</color>
+    <color name="expiry_expired">#C62828</color>
 </resources>
