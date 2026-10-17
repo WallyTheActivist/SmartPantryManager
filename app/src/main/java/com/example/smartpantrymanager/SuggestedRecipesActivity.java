@@ -17,6 +17,8 @@ import com.example.smartpantrymanager.model.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 import android.content.Intent;
+import com.example.smartpantrymanager.util.NavigationHelper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * Shows ONLY the recipes the user can cook right now, using the
@@ -27,6 +29,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     private RecyclerView recyclerRecipes;
     private TextView tvSummary;
     private TextView tvEmptyRecipes;
+    private BottomNavigationView bottomNav;
 
     private DatabaseHelper dbHelper;
     private RecipeAdapter adapter;
@@ -42,6 +45,8 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         tvEmptyRecipes = findViewById(R.id.tvEmptyRecipes);
 
         dbHelper = new DatabaseHelper(this);
+        bottomNav = findViewById(R.id.bottomNav);
+        NavigationHelper.setup(this, bottomNav, R.id.nav_suggested);
 
         adapter = new RecipeAdapter(new ArrayList<>(), recipe -> {
             // Open the Recipe Detail screen, passing the tapped recipe's id

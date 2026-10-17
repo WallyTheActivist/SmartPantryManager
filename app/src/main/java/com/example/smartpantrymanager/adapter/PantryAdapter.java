@@ -13,6 +13,11 @@ import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.model.PantryItem;
 
 import java.util.List;
+import android.content.Context;
+
+import androidx.core.content.ContextCompat;
+
+import com.example.smartpantrymanager.util.ExpiryUtils;
 
 /**
  * Adapter that turns a List of PantryItem objects into rows
@@ -31,6 +36,16 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
 
     private List<PantryItem> items;
     private final OnPantryItemActionListener listener;
+
+    // Expiry-alert settings, supplied by the Activity from SettingsManager
+    private boolean expiryAlertsEnabled = false;
+    private int warningDays = 3;
+
+    /** Tells the adapter whether to highlight expiring items, and how soon counts as "soon". */
+    public void setExpiryWarning(boolean enabled, int days) {
+        this.expiryAlertsEnabled = enabled;
+        this.warningDays = days;
+    }
 
     public PantryAdapter(List<PantryItem> items, OnPantryItemActionListener listener) {
         this.items = items;
@@ -53,6 +68,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     }
 
     // 2. Fills a row with the data of the item at this position
+    // 2. Fills a row with the data of the item at this position
     @Override
     public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
         PantryItem item = items.get(position);
@@ -60,12 +76,33 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         holder.tvItemName.setText(item.getName());
         holder.tvItemQuantity.setText(formatQuantity(item.getQuantity()) + " " + item.getUnit());
 
+        // Expiry line: normal grey, orange if expiring soon, red if expired
         String expiry = item.getExpiryDate();
+        Context context = holder.itemView.getContext();
+        int color = ContextCompat.getColor(context, R.color.text_secondary);
+        String text;
+
         if (expiry == null || expiry.trim().isEmpty()) {
-            holder.tvItemExpiry.setText("No expiry date");
+            text = "No expiry date";
         } else {
-            holder.tvItemExpiry.setText("Expires: " + expiry);
+            text = "Expires: " + expiry;
+            int days = ExpiryUtils.daysUntilExpiry(expiry);
+
+            if (expiryAlertsEnabled && days != ExpiryUtils.NO_EXPIRY) {
+                if (days < 0) {
+                    text = "Expired: " + expiry;
+                    color = ContextCompat.getColor(context, R.color.expiry_expired);
+                } else if (days <= warningDays) {
+                    String when = (days == 0) ? "today"
+                            : "in " + days + (days == 1 ? " day" : " days");
+                    text = "Expires soon (" + when + "): " + expiry;
+                    color = ContextCompat.getColor(context, R.color.expiry_soon);
+                }
+            }
         }
+
+        holder.tvItemExpiry.setText(text);
+        holder.tvItemExpiry.setTextColor(color);
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
         holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(item));

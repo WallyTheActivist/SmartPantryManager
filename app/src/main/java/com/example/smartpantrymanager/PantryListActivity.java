@@ -1,10 +1,10 @@
 package com.example.smartpantrymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartpantrymanager.adapter.PantryAdapter;
 import com.example.smartpantrymanager.database.DatabaseHelper;
 import com.example.smartpantrymanager.model.PantryItem;
+import com.example.smartpantrymanager.util.NavigationHelper;
+import com.example.smartpantrymanager.util.SettingsManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.content.Intent;
-
 
 /**
  * Home screen: shows every ingredient currently in the user's pantry.
@@ -29,9 +30,10 @@ public class PantryListActivity extends AppCompatActivity {
     private RecyclerView recyclerPantry;
     private TextView tvEmpty;
     private FloatingActionButton fabAdd;
-    private Button btnSuggested;
+    private BottomNavigationView bottomNav;
 
     private DatabaseHelper dbHelper;
+    private SettingsManager settings;
     private PantryAdapter adapter;
 
     @Override
@@ -43,10 +45,12 @@ public class PantryListActivity extends AppCompatActivity {
         recyclerPantry = findViewById(R.id.recyclerPantry);
         tvEmpty = findViewById(R.id.tvEmpty);
         fabAdd = findViewById(R.id.fabAdd);
-        btnSuggested = findViewById(R.id.btnSuggested);
+        bottomNav = findViewById(R.id.bottomNav);
 
         dbHelper = new DatabaseHelper(this);
+        settings = new SettingsManager(this);
 
+        NavigationHelper.setup(this, bottomNav, R.id.nav_pantry);
 
         // Create the adapter and tell it what to do when a row is tapped / deleted
         adapter = new PantryAdapter(new ArrayList<>(), new PantryAdapter.OnPantryItemActionListener() {
@@ -72,12 +76,10 @@ public class PantryListActivity extends AppCompatActivity {
             Intent intent = new Intent(PantryListActivity.this, AddEditIngredientActivity.class);
             startActivity(intent);
         });
-        btnSuggested.setOnClickListener(v ->
-                startActivity(new Intent(PantryListActivity.this, SuggestedRecipesActivity.class)));
     }
 
     // Runs every time the screen becomes visible again (e.g. after returning
-    // from the Add/Edit screen), so the list is always up to date.
+    // from the Add/Edit or Settings screen), so the list is always up to date.
     @Override
     protected void onResume() {
         super.onResume();
@@ -87,6 +89,9 @@ public class PantryListActivity extends AppCompatActivity {
     /** Reads all items from SQLite and shows them (or the empty message). */
     private void loadPantryItems() {
         List<PantryItem> items = dbHelper.getAllPantryItems();
+
+        // Apply the user's expiry-alert settings before showing the list
+        adapter.setExpiryWarning(settings.isExpiryAlertsEnabled(), settings.getExpiryWarningDays());
         adapter.setItems(items);
 
         if (items.isEmpty()) {
