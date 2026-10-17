@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.content.Intent;
 
+
 /**
  * Home screen: shows every ingredient currently in the user's pantry.
  */
@@ -27,6 +29,7 @@ public class PantryListActivity extends AppCompatActivity {
     private RecyclerView recyclerPantry;
     private TextView tvEmpty;
     private FloatingActionButton fabAdd;
+    private Button btnSuggested;
 
     private DatabaseHelper dbHelper;
     private PantryAdapter adapter;
@@ -40,8 +43,10 @@ public class PantryListActivity extends AppCompatActivity {
         recyclerPantry = findViewById(R.id.recyclerPantry);
         tvEmpty = findViewById(R.id.tvEmpty);
         fabAdd = findViewById(R.id.fabAdd);
+        btnSuggested = findViewById(R.id.btnSuggested);
 
         dbHelper = new DatabaseHelper(this);
+
 
         // Create the adapter and tell it what to do when a row is tapped / deleted
         adapter = new PantryAdapter(new ArrayList<>(), new PantryAdapter.OnPantryItemActionListener() {
@@ -67,6 +72,8 @@ public class PantryListActivity extends AppCompatActivity {
             Intent intent = new Intent(PantryListActivity.this, AddEditIngredientActivity.class);
             startActivity(intent);
         });
+        btnSuggested.setOnClickListener(v ->
+                startActivity(new Intent(PantryListActivity.this, SuggestedRecipesActivity.class)));
     }
 
     // Runs every time the screen becomes visible again (e.g. after returning
