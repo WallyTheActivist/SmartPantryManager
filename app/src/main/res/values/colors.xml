@@ -5,4 +5,5 @@
     <color name="text_secondary">#757575</color>
     <color name="expiry_soon">#EF6C00</color>
     <color name="expiry_expired">#C62828</color>
+    <color name="green_container">#C8E6C9</color>
 </resources>

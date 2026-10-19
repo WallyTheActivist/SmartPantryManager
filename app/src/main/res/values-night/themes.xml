@@ -1,7 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SmartPantryManager" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+    <!-- Base application theme: always light, with the app's green colour scheme -->
+    <style name="Base.Theme.SmartPantryManager" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorPrimaryContainer">@color/green_container</item>
+        <item name="colorOnPrimaryContainer">@color/primary_green</item>
+        <item name="colorSecondary">@color/primary_green</item>
+        <item name="colorSecondaryContainer">@color/green_container</item>
+        <item name="colorOnSecondaryContainer">@color/primary_green</item>
+        <item name="bottomNavigationStyle">@style/App.BottomNav</item>
+        <item name="materialCardViewStyle">@style/App.Card</item>
     </style>
+
+    <style name="Theme.SmartPantryManager" parent="Base.Theme.SmartPantryManager" />
+
+    <!-- White bottom navigation bar -->
+    <style name="App.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">@android:color/white</item>
+    </style>
+
+    <!-- White cards -->
+    <style name="App.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@android:color/white</item>
+    </style>
+
 </resources>
