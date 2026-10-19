@@ -1,5 +1,6 @@
 package com.example.smartpantrymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -13,12 +14,11 @@ import com.example.smartpantrymanager.database.DatabaseHelper;
 import com.example.smartpantrymanager.logic.RecipeMatcher;
 import com.example.smartpantrymanager.model.PantryItem;
 import com.example.smartpantrymanager.model.Recipe;
+import com.example.smartpantrymanager.util.NavigationHelper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.content.Intent;
-import com.example.smartpantrymanager.util.NavigationHelper;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * Shows ONLY the recipes the user can cook right now, using the
@@ -67,7 +67,9 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         loadSuggestions();
     }
 
-    /** Reads pantry + recipes, applies the strict rule, and updates the screen. */
+    /**
+     * Reads pantry + recipes, applies the strict rule, and updates the screen.
+     */
     private void loadSuggestions() {
         List<PantryItem> pantry = dbHelper.getAllPantryItems();
         List<Recipe> allRecipes = dbHelper.getAllRecipes();

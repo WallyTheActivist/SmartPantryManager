@@ -1,20 +1,19 @@
 package com.example.smartpantrymanager.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.content.ContentValues;
-import android.database.Cursor;
 
 import com.example.smartpantrymanager.model.PantryItem;
+import com.example.smartpantrymanager.model.Recipe;
+import com.example.smartpantrymanager.model.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.database.DatabaseUtils;
-
-import com.example.smartpantrymanager.model.Recipe;
-import com.example.smartpantrymanager.model.RecipeIngredient;
 
 /**
  * Creates and manages the SQLite database for the Smart Pantry Manager.
@@ -270,7 +269,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return recipe;
     }
 
-    /** Returns how many recipes are stored (used to verify the seeding). */
+    /**
+     * Returns how many recipes are stored (used to verify the seeding).
+     */
     public long getRecipeCount() {
         SQLiteDatabase db = this.getReadableDatabase();
         long count = DatabaseUtils.queryNumEntries(db, TABLE_RECIPES);
@@ -278,7 +279,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    /** Loads the ingredient lines of one recipe using an already-open database. */
+    /**
+     * Loads the ingredient lines of one recipe using an already-open database.
+     */
     private List<RecipeIngredient> getIngredientsForRecipe(SQLiteDatabase db, int recipeId) {
         List<RecipeIngredient> ingredients = new ArrayList<>();
 
@@ -300,7 +303,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return ingredients;
     }
 
-    /** Converts the row the Cursor points at into a Recipe (without ingredients). */
+    /**
+     * Converts the row the Cursor points at into a Recipe (without ingredients).
+     */
     private Recipe cursorToRecipe(Cursor cursor) {
         int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_RECIPE_ID));
         String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_RECIPE_NAME));

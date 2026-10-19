@@ -10,7 +10,9 @@ public final class FormatUtils {
     private FormatUtils() {
     }
 
-    /** Shows 3.0 as "3" but keeps 2.5 as "2.5". */
+    /**
+     * Shows 3.0 as "3" but keeps 2.5 as "2.5".
+     */
     public static String formatQuantity(double quantity) {
         if (quantity == Math.floor(quantity)) {
             return String.valueOf((long) quantity);
@@ -18,7 +20,9 @@ public final class FormatUtils {
         return String.valueOf(quantity);
     }
 
-    /** Turns "bell pepper" into "Bell pepper". */
+    /**
+     * Turns "bell pepper" into "Bell pepper".
+     */
     public static String capitalise(String text) {
         if (text == null || text.isEmpty()) {
             return "";

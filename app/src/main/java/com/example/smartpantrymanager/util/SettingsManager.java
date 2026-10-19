@@ -20,7 +20,9 @@ public class SettingsManager {
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
-    /** Are expiring-soon alerts switched on? Default: yes. */
+    /**
+     * Are expiring-soon alerts switched on? Default: yes.
+     */
     public boolean isExpiryAlertsEnabled() {
         return prefs.getBoolean(KEY_EXPIRY_ALERTS, true);
     }
@@ -29,7 +31,9 @@ public class SettingsManager {
         prefs.edit().putBoolean(KEY_EXPIRY_ALERTS, enabled).apply();
     }
 
-    /** How many days before expiry an item counts as "expiring soon". Default: 3. */
+    /**
+     * How many days before expiry an item counts as "expiring soon". Default: 3.
+     */
     public int getExpiryWarningDays() {
         return prefs.getInt(KEY_WARNING_DAYS, 3);
     }

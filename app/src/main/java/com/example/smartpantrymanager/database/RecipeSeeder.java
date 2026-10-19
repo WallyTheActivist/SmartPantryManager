@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Pre-loads the recipe collection into the database on first run.
- *
+ * <p>
  * Ingredient names are stored in lowercase, singular form (e.g. "tomato", not
  * "Tomatoes") so the strict-matching logic in Step 7 can compare them reliably.
  */
@@ -15,7 +15,9 @@ public final class RecipeSeeder {
     private RecipeSeeder() {
     }
 
-    /** Inserts all starter recipes. Called from DatabaseHelper. */
+    /**
+     * Inserts all starter recipes. Called from DatabaseHelper.
+     */
     public static void seed(SQLiteDatabase db) {
 
         insertRecipe(db, "Scrambled Eggs",
@@ -177,7 +179,9 @@ public final class RecipeSeeder {
         }
     }
 
-    /** Small helper that packs one ingredient line (name, quantity, unit) into an array. */
+    /**
+     * Small helper that packs one ingredient line (name, quantity, unit) into an array.
+     */
     private static Object[] ing(String name, double quantity, String unit) {
         return new Object[]{name, quantity, unit};
     }

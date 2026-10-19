@@ -52,7 +52,9 @@ public final class NavigationHelper {
         });
     }
 
-    /** Non-home screens close themselves when switching tabs, so the back stack stays short. */
+    /**
+     * Non-home screens close themselves when switching tabs, so the back stack stays short.
+     */
     private static void closeIfNotHome(Activity activity) {
         if (!(activity instanceof PantryListActivity)) {
             activity.finish();

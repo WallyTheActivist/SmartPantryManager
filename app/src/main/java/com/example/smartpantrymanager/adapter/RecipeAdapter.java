@@ -20,7 +20,9 @@ import java.util.List;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    /** Callback so the Activity decides what happens when a recipe is tapped. */
+    /**
+     * Callback so the Activity decides what happens when a recipe is tapped.
+     */
     public interface OnRecipeClickListener {
         void onRecipeClick(Recipe recipe);
     }
@@ -33,7 +35,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         this.listener = listener;
     }
 
-    /** Replaces the data and refreshes the list on screen. */
+    /**
+     * Replaces the data and refreshes the list on screen.
+     */
     public void setRecipes(List<Recipe> newRecipes) {
         this.recipes = newRecipes;
         notifyDataSetChanged();
@@ -62,7 +66,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return recipes.size();
     }
 
-    /** Builds text such as "3 ingredients: egg, butter, salt". */
+    /**
+     * Builds text such as "3 ingredients: egg, butter, salt".
+     */
     private String buildIngredientSummary(Recipe recipe) {
         List<RecipeIngredient> ingredients = recipe.getIngredients();
         StringBuilder names = new StringBuilder();
@@ -78,7 +84,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return ingredients.size() + label + names;
     }
 
-    /** Holds the views of ONE recipe row. */
+    /**
+     * Holds the views of ONE recipe row.
+     */
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
         TextView tvRecipeName;
         TextView tvRecipeIngredients;

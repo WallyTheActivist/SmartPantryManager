@@ -11,7 +11,9 @@ import java.util.Locale;
  */
 public final class ExpiryUtils {
 
-    /** Returned when an item has no (valid) expiry date. */
+    /**
+     * Returned when an item has no (valid) expiry date.
+     */
     public static final int NO_EXPIRY = Integer.MAX_VALUE;
 
     private ExpiryUtils() {

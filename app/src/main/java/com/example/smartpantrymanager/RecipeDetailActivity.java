@@ -59,7 +59,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
     }
 
-    /** Builds one bullet line per ingredient, e.g. "• Egg: 3 pcs". */
+    /**
+     * Builds one bullet line per ingredient, e.g. "• Egg: 3 pcs".
+     */
     private String buildIngredientText(Recipe recipe) {
         StringBuilder text = new StringBuilder();
 

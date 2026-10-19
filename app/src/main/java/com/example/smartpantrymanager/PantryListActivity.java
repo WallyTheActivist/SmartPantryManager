@@ -86,7 +86,9 @@ public class PantryListActivity extends AppCompatActivity {
         loadPantryItems();
     }
 
-    /** Reads all items from SQLite and shows them (or the empty message). */
+    /**
+     * Reads all items from SQLite and shows them (or the empty message).
+     */
     private void loadPantryItems() {
         List<PantryItem> items = dbHelper.getAllPantryItems();
 
@@ -103,7 +105,9 @@ public class PantryListActivity extends AppCompatActivity {
         }
     }
 
-    /** Asks the user to confirm before deleting an item. */
+    /**
+     * Asks the user to confirm before deleting an item.
+     */
     private void confirmDelete(PantryItem item) {
         new AlertDialog.Builder(this)
                 .setTitle("Delete ingredient")

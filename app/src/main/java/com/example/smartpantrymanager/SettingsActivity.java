@@ -65,7 +65,9 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    /** Greys out the day options while alerts are switched off. */
+    /**
+     * Greys out the day options while alerts are switched off.
+     */
     private void setRadioGroupEnabled(boolean enabled) {
         for (int i = 0; i < rgDays.getChildCount(); i++) {
             rgDays.getChildAt(i).setEnabled(enabled);

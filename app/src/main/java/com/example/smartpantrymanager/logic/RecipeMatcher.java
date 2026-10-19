@@ -12,16 +12,16 @@ import java.util.Map;
 
 /**
  * Core business logic of the Smart Pantry Manager: the STRICT-MATCHING RULE.
- *
+ * <p>
  * A recipe is only "suggested" if EVERY ingredient it requires is present in the
  * pantry in at least the required quantity. One missing ingredient, or one
  * ingredient with too little quantity, excludes the whole recipe.
- *
+ * <p>
  * To cope with real-world messiness the matcher:
- *   1. normalises names (case, spaces, plurals): "Tomatoes" matches "tomato"
- *   2. converts units to a base unit: 1 kg satisfies 500 g, 1 cup satisfies 2 tbsp
- *   3. adds up duplicate pantry entries: 100 g + 100 g flour = 200 g
- *
+ * 1. normalises names (case, spaces, plurals): "Tomatoes" matches "tomato"
+ * 2. converts units to a base unit: 1 kg satisfies 500 g, 1 cup satisfies 2 tbsp
+ * 3. adds up duplicate pantry entries: 100 g + 100 g flour = 200 g
+ * <p>
  * This class has no Android code in it, so it can be unit-tested on its own.
  */
 public final class RecipeMatcher {
@@ -123,7 +123,9 @@ public final class RecipeMatcher {
     //                   PRIVATE HELPERS
     // =====================================================
 
-    /** Simple plural-to-singular rules (not a full language solution, and it doesn't need to be). */
+    /**
+     * Simple plural-to-singular rules (not a full language solution, and it doesn't need to be).
+     */
     private static String singularise(String word) {
         int len = word.length();
 
@@ -147,25 +149,33 @@ public final class RecipeMatcher {
         return unit == null ? "" : unit.toLowerCase(Locale.ROOT).trim();
     }
 
-    /** Which family a unit belongs to. Unknown units get a family of their own. */
+    /**
+     * Which family a unit belongs to. Unknown units get a family of their own.
+     */
     private static String familyOf(String unit) {
         String key = normaliseUnit(unit);
         String family = UNIT_FAMILY.get(key);
         return family != null ? family : "other:" + key;
     }
 
-    /** Converts a quantity into its family's base unit (kg to g, tbsp to ml, and so on). */
+    /**
+     * Converts a quantity into its family's base unit (kg to g, tbsp to ml, and so on).
+     */
     private static double toBase(double quantity, String unit) {
         Double factor = UNIT_FACTOR.get(normaliseUnit(unit));
         return quantity * (factor != null ? factor : 1.0);
     }
 
-    /** Lookup key: normalised name plus unit family, e.g. "flour|mass". */
+    /**
+     * Lookup key: normalised name plus unit family, e.g. "flour|mass".
+     */
     private static String makeKey(String name, String unit) {
         return normaliseName(name) + "|" + familyOf(unit);
     }
 
-    /** Adds up the pantry into one total (in base units) per ingredient. */
+    /**
+     * Adds up the pantry into one total (in base units) per ingredient.
+     */
     private static Map<String, Double> buildPantryTotals(List<PantryItem> pantry) {
         Map<String, Double> totals = new HashMap<>();
 

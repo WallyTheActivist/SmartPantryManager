@@ -1,5 +1,6 @@
 package com.example.smartpantrymanager.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,17 +8,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.model.PantryItem;
+import com.example.smartpantrymanager.util.ExpiryUtils;
+import com.example.smartpantrymanager.util.FormatUtils;
 
 import java.util.List;
-import android.content.Context;
-
-import androidx.core.content.ContextCompat;
-
-import com.example.smartpantrymanager.util.ExpiryUtils;
 
 /**
  * Adapter that turns a List of PantryItem objects into rows
@@ -31,6 +30,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
      */
     public interface OnPantryItemActionListener {
         void onItemClick(PantryItem item);
+
         void onDeleteClick(PantryItem item);
     }
 
@@ -41,7 +41,9 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     private boolean expiryAlertsEnabled = false;
     private int warningDays = 3;
 
-    /** Tells the adapter whether to highlight expiring items, and how soon counts as "soon". */
+    /**
+     * Tells the adapter whether to highlight expiring items, and how soon counts as "soon".
+     */
     public void setExpiryWarning(boolean enabled, int days) {
         this.expiryAlertsEnabled = enabled;
         this.warningDays = days;
@@ -52,7 +54,9 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         this.listener = listener;
     }
 
-    /** Replaces the data and refreshes the list on screen. */
+    /**
+     * Replaces the data and refreshes the list on screen.
+     */
     public void setItems(List<PantryItem> newItems) {
         this.items = newItems;
         notifyDataSetChanged();
@@ -74,7 +78,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         PantryItem item = items.get(position);
 
         holder.tvItemName.setText(item.getName());
-        holder.tvItemQuantity.setText(formatQuantity(item.getQuantity()) + " " + item.getUnit());
+        holder.tvItemQuantity.setText(FormatUtils.formatQuantity(item.getQuantity()) + " " + item.getUnit());
 
         // Expiry line: normal grey, orange if expiring soon, red if expired
         String expiry = item.getExpiryDate();
@@ -114,13 +118,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         return items.size();
     }
 
-    /** Shows 3.0 as "3" but keeps 2.5 as "2.5". */
-    private String formatQuantity(double quantity) {
-        if (quantity == Math.floor(quantity)) {
-            return String.valueOf((long) quantity);
-        }
-        return String.valueOf(quantity);
-    }
 
     /**
      * Holds references to the views of ONE row so findViewById

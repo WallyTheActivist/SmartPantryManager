@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartpantrymanager.database.DatabaseHelper;
 import com.example.smartpantrymanager.model.PantryItem;
+import com.example.smartpantrymanager.util.FormatUtils;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -81,7 +82,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
             // Pre-fill the form with the item's current values
             etName.setText(existing.getName());
-            etQuantity.setText(formatQuantity(existing.getQuantity()));
+            etQuantity.setText(FormatUtils.formatQuantity(existing.getQuantity()));
             etExpiry.setText(existing.getExpiryDate());
             for (int i = 0; i < UNITS.length; i++) {
                 if (UNITS[i].equals(existing.getUnit())) {
@@ -101,7 +102,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(v -> finish());
     }
 
-    /** Opens a DatePickerDialog and writes the chosen date as yyyy-MM-dd. */
+    /**
+     * Opens a DatePickerDialog and writes the chosen date as yyyy-MM-dd.
+     */
     private void showDatePicker() {
         Calendar cal = Calendar.getInstance();
 
@@ -171,7 +174,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         return valid;
     }
 
-    /** Validates, then inserts (Add mode) or updates (Edit mode) the item. */
+    /**
+     * Validates, then inserts (Add mode) or updates (Edit mode) the item.
+     */
     private void saveIngredient() {
         if (!validateInput()) {
             return;   // errors are already shown on the fields
@@ -204,11 +209,5 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         finish();   // closes this screen; the list screen's onResume() refreshes the list
     }
 
-    /** Shows 3.0 as "3" but keeps 2.5 as "2.5". */
-    private String formatQuantity(double quantity) {
-        if (quantity == Math.floor(quantity)) {
-            return String.valueOf((long) quantity);
-        }
-        return String.valueOf(quantity);
-    }
+
 }
